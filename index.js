@@ -74,8 +74,22 @@ whatToDoNext = () => {
                     showTasks();
                     userInterface.question("Indique cual tarea ya fue realizada: ", (indexStr) => {
                         const index = parseInt(indexStr) - 1;
-                        completeTask
+                        completeTask(index);
+                        whatToDoNext();
                     });
+            break;
+                case 'ver':
+                showTasks();
+                whatToDoNext();
+            break;
+                case 'salir':
+                console.log("Saliendo del programa");
+                userInterface.close();
+            break;
+                default:
+                console.log("Solicite una de las acciones en la lista: (agregar/borrar/terminar/ver/salir)");
+                whatToDoNext();
+            break;
             }
         }
     );
