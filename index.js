@@ -27,3 +27,13 @@ addTask = (description) => {
     });
     console.log("Tarea añadida");
 }
+
+//funcion para eliminar tarea
+deleteTask = (index) => {
+    if (index >= 0 && index < tasks.length) {
+        tasks.splice(index, 1);
+        console.log("Tarea eliminada");
+    } else {
+        console.log("No hay tareas para eliminar");
+    }
+}
