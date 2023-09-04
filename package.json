@@ -1,0 +1,14 @@
+{
+  "name": "lista-de-tareas-node",
+  "version": "1.0.0",
+  "description": "\"proyecto integrador node&npm\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hector Rojas",
+  "license": "ISC",
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
+}
