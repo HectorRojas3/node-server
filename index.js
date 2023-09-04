@@ -37,3 +37,46 @@ deleteTask = (index) => {
         console.log("No hay tareas para eliminar");
     }
 }
+
+//funcion para marcar una tarea como completada
+completeTask = (index) => {
+    if (index >= 0 && index < tasks.length) {
+        tasks[index].completed = true;
+        console.log("Tarea marcada como completada");
+    } else {
+        console.log("No Tiene tareas pendientes");
+    }
+}
+
+//logica para interactuar con el app
+
+//recibir input para realizar una accion
+whatToDoNext = () => {
+    userInterface.question(
+        "¿Que accion desea realizar?: (agregar/borrar/terminar/ver/salir) ",
+        (action) => {
+            switch (action) {
+                case 'agregar':
+                    userInterface.question("Nombre de la tarea: ", (description) => {
+                        addTask(description);
+                        whatToDoNext();
+                    });
+            break;
+                case 'borrar':
+                    showTasks();
+                    userInterface.question("Indique cual tarea eliminar: ", (indexStr) => {
+                        const index = parseInt(indexStr) - 1;
+                        deleteTask(index);
+                        whatToDoNext();
+                    });
+            break;
+                case 'terminar':
+                    showTasks();
+                    userInterface.question("Indique cual tarea ya fue realizada: ", (indexStr) => {
+                        const index = parseInt(indexStr) - 1;
+                        completeTask
+                    });
+            }
+        }
+    );
+}
