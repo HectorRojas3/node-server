@@ -1,7 +1,8 @@
 //imoprtar modulo readline
 const readline = require('readline');
+const { deserialize } = require('v8');
 
-//interfaz de consola para interactuar en consola
+//interfaz para interactuar en consola
 const userInterface = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -19,12 +20,23 @@ showTasks = () => {
     });
 }
 
-//funcion para añadir una tarea
+/* //funcion para añadir una tarea
 addTask = (description) => {
     tasks.push({
         description,
         completed: false,
     });
+    console.log("Tarea añadida");
+} */
+
+//funcion para añadir tarea 1.2
+addTask = (description) => {
+    const task = {
+        id: taskId++,
+        description,
+        completed: false,
+    };
+    tasks.push(task);
     console.log("Tarea añadida");
 }
 

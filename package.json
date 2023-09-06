@@ -4,7 +4,7 @@
   "description": "\"proyecto integrador node&npm\"",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon index.js"
   },
   "author": "Hector Rojas",
   "license": "ISC",
