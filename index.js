@@ -19,6 +19,8 @@ showTasks = () => {
     });
 }
 
+/* 
+//v1.0
 //funcion para añadir una tarea
 addTask = (description) => {
     tasks.push({
@@ -26,7 +28,8 @@ addTask = (description) => {
         completed: false,
     });
     console.log("Tarea añadida");
-}
+} 
+
 
 //funcion para eliminar tarea
 deleteTask = (index) => {
@@ -46,10 +49,59 @@ completeTask = (index) => {
     } else {
         console.log("No Tiene tareas pendientes");
     }
+} */
+
+//async version
+//crear tarea
+async function addTask (description) {
+    return new Promise ((res, rej) => {
+        //Funcion para simular operacion asincrona con retraso
+        setTimeout(() => {
+            tasks.push({
+                description,
+                completed: false,
+            });
+            res("Tarea añadida");
+        }, 1000);
+    })
 }
+
+//eliminar tarea
+async function deleteTask (index) {
+    return new Promise ((res, rej) => {
+        //Funcion para simular operacion asincrona con retraso 
+        setTimeout(() => {
+            if (index >= 0 && index < tasks.length) {
+        tasks.splice(index, 1);
+        res("Tarea marcada como completada");
+    } else {
+        rej("No Tiene tareas pendientes");
+    }
+        }, 1000);
+    })
+} 
+
+
+
+//completar tarea
+async function completeTask (index){
+    return new Promise ((res, rej) => {
+        //Funcion para simular operacion asincrona con retraso
+        setTimeout(() => {
+            if (index >= 0 && index < tasks.length) {
+                tasks[index].completed = true;
+                res("Tarea marcada como completada");
+            } else {
+                rej("No Tiene tareas pendientes");
+            }
+        }, 1000);
+    })
+}
+
 
 //logica para interactuar con el app
 
+/* //v1.0
 //recibir input para realizar una accion
 whatToDoNext = () => {
     userInterface.question(
@@ -93,7 +145,71 @@ whatToDoNext = () => {
             }
         }
     );
+} */
+
+//async version
+
+// Función para interactuar con el usuario
+function userInteraction(question) {
+    return new Promise((res) => {
+        userInteraction.question(question, (answer) => {
+            res(answer);
+        });
+    });
+} 
+
+async function whatToDoNext () {
+    while (true) {
+        // estableciendo casos para interactuar con el ususario
+        showTasks();
+        const action = await userInteraction("¿Que accion desea realizar?: (agregar/borrar/terminar/ver/salir): ")
+        switch (action) {
+            case 'agregar':
+                const description = await userInteraction("Nombre de la tarea");
+                try {
+                    const result = await addTask(description);
+                    console.log(result);
+                } catch (error) {
+                    console.error(error);
+                }
+                break;
+            case 'borrar':
+                showTasks()
+                const indexDelete = await userInteraction("Indique cual tarea ya fue realizada: ");
+                try {
+                    const index = parseInt(indexDelete) -1;
+                    const result = await deleteTask(index);
+                    console.log(result);
+                } catch (error) {
+                    console.error(error);
+                }
+                break;
+            case 'terminar':
+                showTasks()
+                const indexComplete = await userInteraction("Indique cuál tarea ya fue realizada: ");
+                try {
+                    const indexComplete = parseInt(indexComplete) - 1;
+                    const result = await completeTask(index);
+                    console.log(result);
+                } catch {
+                    console.error(error)
+                }
+                break;
+            case 'ver':
+                showTasks()
+                break;
+            case 'salir':
+                console.log("saliendo del programa");
+                userInteraction.close();
+                //saliendo de la funcion asincrona whatToDoNext
+                return;
+                default:
+                    console.log("Solicite una de las acciones en la lista: (agregar/borrar/terminar/ver/salir)");
+                break;
+        }
+    }
 }
+
 
 //Ejecutar el app
 whatToDoNext();
