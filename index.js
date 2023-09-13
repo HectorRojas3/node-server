@@ -1,7 +1,7 @@
 //imoprtar modulo readline
 const readline = require('readline');
 
-//interfaz de consola para interactuar en consola
+//interfaz de consola para interaccion entre usuario y aplicacion
 const userInterface = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -49,9 +49,11 @@ completeTask = (index) => {
     } else {
         console.log("No Tiene tareas pendientes");
     }
-} */
+} 
+*/
 
-//async version
+/* 
+//async, await version
 //crear tarea
 async function addTask (description) {
     return new Promise ((res, rej) => {
@@ -96,12 +98,56 @@ async function completeTask (index){
             }
         }, 1000);
     })
+} 
+*/
+
+// version then() method
+// funcion para crear tarea
+function addTask(description) {
+    return new Promise((res, _rej) => {
+        setTimeout(() => {
+            tasks.push({
+                description,
+                completed: false,
+            });
+            res("tarea añadida")
+        }, 1000);
+    });
+}
+
+//funcion para borrar tarea
+function deleteTask(index) {
+    return new Promise((res, rej) => {
+        setTimeout(() => {
+            if (index >= 0 && index < tasks.length) {
+                tasks.splice(index, 1);
+                res("tarea eliminada");
+            } else {
+                rej("no hay tareas para eliminar");
+            }
+        }, 1000);
+    });
+}
+
+//funcion para terminar tarea
+function completeTask(index) {
+    return new Promise((res, rej) => {
+        setTimeout(() => {
+            if (index >= 0 && index < tasks.length) {
+                tasks[index].completed = true;
+                res("tarea completada");
+            } else {
+                rej("no tienes tareas pendientes");
+            }
+        }, 1000);
+    })
 }
 
 
 //logica para interactuar con el app
 
-/* //v1.0
+/* 
+//v1.0
 //recibir input para realizar una accion
 whatToDoNext = () => {
     userInterface.question(
@@ -145,11 +191,12 @@ whatToDoNext = () => {
             }
         }
     );
-} */
+} 
+*/
 
-//async version
-
-// Función para interactuar con el usuario
+/* 
+//async, await version
+// Se necesita crear la función para interactuar con el usuario
 function userInteraction(question) {
     return new Promise((res) => {
         userInterface.question(question, (answer) => {
@@ -158,6 +205,7 @@ function userInteraction(question) {
     });
 } 
 
+//funcion asincronica, principal
 async function whatToDoNext () {
     while (true) {
         // estableciendo casos para interactuar con el ususario
@@ -207,6 +255,16 @@ async function whatToDoNext () {
                     console.log("Solicite una de las acciones en la lista: (agregar/borrar/terminar/ver/salir)");
                 break;
         }
+    }
+} 
+*/
+
+// version then() method
+
+function whatToDoNext() {
+    while(true){
+        showTasks();
+        
     }
 }
 
