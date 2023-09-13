@@ -152,7 +152,7 @@ whatToDoNext = () => {
 // Función para interactuar con el usuario
 function userInteraction(question) {
     return new Promise((res) => {
-        userInteraction.question(question, (answer) => {
+        userInterface.question(question, (answer) => {
             res(answer);
         });
     });
@@ -165,7 +165,7 @@ async function whatToDoNext () {
         const action = await userInteraction("¿Que accion desea realizar?: (agregar/borrar/terminar/ver/salir): ")
         switch (action) {
             case 'agregar':
-                const description = await userInteraction("Nombre de la tarea");
+                const description = await userInteraction("Nombre de la tarea que dease agregar: ");
                 try {
                     const result = await addTask(description);
                     console.log(result);
@@ -188,10 +188,10 @@ async function whatToDoNext () {
                 showTasks()
                 const indexComplete = await userInteraction("Indique cuál tarea ya fue realizada: ");
                 try {
-                    const indexComplete = parseInt(indexComplete) - 1;
+                    const index = parseInt(indexComplete) - 1;
                     const result = await completeTask(index);
                     console.log(result);
-                } catch {
+                } catch (error) {
                     console.error(error)
                 }
                 break;
@@ -200,7 +200,7 @@ async function whatToDoNext () {
                 break;
             case 'salir':
                 console.log("saliendo del programa");
-                userInteraction.close();
+                userInterface.close();
                 //saliendo de la funcion asincrona whatToDoNext
                 return;
                 default:
