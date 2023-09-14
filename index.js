@@ -194,9 +194,10 @@ whatToDoNext = () => {
 } 
 */
 
-/* 
+
 //async, await version
 // Se necesita crear la función para interactuar con el usuario
+// tambien se necesita para que funcione la version con el metodo then()
 function userInteraction(question) {
     return new Promise((res) => {
         userInterface.question(question, (answer) => {
@@ -205,6 +206,7 @@ function userInteraction(question) {
     });
 } 
 
+/* 
 //funcion asincronica, principal
 async function whatToDoNext () {
     while (true) {
@@ -264,10 +266,45 @@ async function whatToDoNext () {
 function whatToDoNext() {
     while(true){
         showTasks();
-        
+        userInteraction("¿Qué acción desea realizar?: (agregar/borrar/terminar/ver/salir) ")
+            .then(action => {
+                switch(action) {
+                    case 'agregar':
+                        return userInteraction("nombre de la tarea que desea agregar: ");
+                    case 'borrar':
+                        showTasks();
+                        return userInteraction("indique cual tarea desea borrar: ");
+                    case 'terminar':
+                        showTasks();
+                        return userInteraction("indique el numero de la tarea que ya fue realizada: ");
+                    case 'ver':
+                        return null
+                    case 'salir':
+                        console.log("Saliendo del programa");
+                        userInterface.close();
+                        return Promise.reject("Salida");
+                    default:
+                        console.log("escriba una opcion valida (agregar/borrar/terminar/ver/salir) ");
+                        return null
+                }
+            })
+            .then(description => {
+                if (description !== null) {
+                    return addTask(description);
+                }
+            })
+            .then(result => {
+                if (result) {
+                    console.log(result);
+                }
+            })
+            .catch(error => {
+                if(error !== "Salida"){
+                    console.error(error);
+                }
+            })
     }
 }
-
 
 //Ejecutar el app
 whatToDoNext();
