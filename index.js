@@ -1,111 +1,26 @@
-//imoprtar modulo readline
-const readline = require('readline');
-const { deserialize } = require('v8');
+//iniciando el servidor
+const http = require("http");
+const host = "localhost";
+const port = 8000;
 
-//interfaz para interactuar en consola
-const userInterface = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
+//lista de tareas
+const tasks = [
+  { id: 1, description: "Presentar entregable de node.js", completed: false },
+  { id: 1, description: "Preparar la cena", completed: true },
+  { id: 1, description: "Leer 10 paginas de habitos atomicos", completed: true }
+];
+
+//configurando respuesta de solicitud y creando el servidor
+const server = http.createServer((req, res) => {
+  if (req.url === "/tasks") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(tasks));
+  } else {
+    res.writeHead(404);
+    res.end("Direccion no encontrada");
+  }
 });
 
-//array vacio para almacenar las tareas
-const tasks = [];
-
-//funcion para mostrar tareas
-showTasks = () => {
-    console.log("Lista de Tareas con Node:");
-    tasks.forEach((task, index) => {
-        const status = task.completed ? 'Completada' : 'Pendiente';
-        console.log(`${index + 1}. [${status}] - ${task.description}`);
-    });
-}
-
-/* //funcion para añadir una tarea
-addTask = (description) => {
-    tasks.push({
-        description,
-        completed: false,
-    });
-    console.log("Tarea añadida");
-} */
-
-//funcion para añadir tarea 1.2
-addTask = (description) => {
-    const task = {
-        id: taskId++,
-        description,
-        completed: false,
-    };
-    tasks.push(task);
-    console.log("Tarea añadida");
-}
-
-//funcion para eliminar tarea
-deleteTask = (index) => {
-    if (index >= 0 && index < tasks.length) {
-        tasks.splice(index, 1);
-        console.log("Tarea eliminada");
-    } else {
-        console.log("No hay tareas para eliminar");
-    }
-}
-
-//funcion para marcar una tarea como completada
-completeTask = (index) => {
-    if (index >= 0 && index < tasks.length) {
-        tasks[index].completed = true;
-        console.log("Tarea marcada como completada");
-    } else {
-        console.log("No Tiene tareas pendientes");
-    }
-}
-
-//logica para interactuar con el app
-
-//recibir input para realizar una accion
-whatToDoNext = () => {
-    userInterface.question(
-        "¿Que accion desea realizar?: (agregar/borrar/terminar/ver/salir) ",
-        (action) => {
-            switch (action) {
-                case 'agregar':
-                    userInterface.question("Nombre de la tarea: ", (description) => {
-                        addTask(description);
-                        whatToDoNext();
-                    });
-            break;
-                case 'borrar':
-                    showTasks();
-                    userInterface.question("Indique cual tarea eliminar: ", (indexStr) => {
-                        const index = parseInt(indexStr) - 1;
-                        deleteTask(index);
-                        whatToDoNext();
-                    });
-            break;
-                case 'terminar':
-                    showTasks();
-                    userInterface.question("Indique cual tarea ya fue realizada: ", (indexStr) => {
-                        const index = parseInt(indexStr) - 1;
-                        completeTask(index);
-                        whatToDoNext();
-                    });
-            break;
-                case 'ver':
-                showTasks();
-                whatToDoNext();
-            break;
-                case 'salir':
-                console.log("Saliendo del programa");
-                userInterface.close();
-            break;
-                default:
-                console.log("Solicite una de las acciones en la lista: (agregar/borrar/terminar/ver/salir)");
-                whatToDoNext();
-            break;
-            }
-        }
-    );
-}
-
-//Ejecutar el app
-whatToDoNext();
+server.listen(port, host, () => {
+  console.log(`Server running on http://${host}:${port}`);
+});
